@@ -50,11 +50,11 @@
 
 		function initialize(){
 			bid_history.push(2000);
-
+			
 			bid_list.set("陳柏安(玩家)", 2000);
-			bid_list.set("陳建宏", randomInt(0, bid_list.get("陳柏安(玩家)")));
-			bid_list.set("黃佳晨", randomInt(0, bid_list.get("陳柏安(玩家)")));
-			bid_list.set("范姜永岩", randomInt(0, bid_list.get("陳柏安(玩家)")));
+			bid_list.set("陳建宏", randomInt(0, bid_list.get("陳柏安(玩家)")/10)*10);
+			bid_list.set("黃佳晨", randomInt(0, bid_list.get("陳柏安(玩家)")/10)*10);
+			bid_list.set("范姜永岩", randomInt(0, bid_list.get("陳柏安(玩家)")/10)*10);
 			
 			bid_list_sort();
 			refresh();
@@ -205,6 +205,12 @@
 							<input id="money" name="money" readonly="readonly"  value=500><br>
 							<button type="button" class="btn btn-primary btn-lg" onclick="plus(1000);setTotalPrice();">+1000</button>
 							<button type="button" class="btn btn-primary btn-lg" onclick="plus(500);setTotalPrice();">+500</button>
+							<button type="button" class="btn btn-primary btn-lg" onclick="plus(100);setTotalPrice();">+100</button>
+							<button type="button" class="btn btn-primary btn-lg" onclick="plus(50);setTotalPrice();">+50</button>
+							<button type="button" class="btn btn-primary btn-lg" onclick="plus(10);setTotalPrice();">+10</button>
+							<button type="button" class="btn btn-primary btn-lg" onclick="minus(10);setTotalPrice();">-10</button>
+							<button type="button" class="btn btn-primary btn-lg" onclick="minus(50);setTotalPrice();">-50</button>
+							<button type="button" class="btn btn-primary btn-lg" onclick="minus(100);setTotalPrice();">-100</button>
 							<button type="button" class="btn btn-primary btn-lg" onclick="minus(500);setTotalPrice();">-500</button>
 							<button type="button" class="btn btn-primary btn-lg" onclick="minus(1000);setTotalPrice();">-1000</button>
                             <button type="button" class="btn btn-default btn-lg" onclick="reset();setTotalPrice();">還原</button>
