@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php 
+  session_start();
+?>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -47,18 +49,22 @@
 		var max_willing_bid = 5000;
 		// 2 or 3 回合
 		var total_round = randomInt(2, 3);
+        // 玩家名字
+        var player = '<?php echo $_SESSION['name']?>'
 
 		function initialize(){
+			// alert('init');
+			
 			bid_history.push(2000);
-			
-			bid_list.set("陳柏安(玩家)", 2000);
-			bid_list.set("陳建宏", randomInt(0, bid_list.get("陳柏安(玩家)")/10)*10);
-			bid_list.set("黃佳晨", randomInt(0, bid_list.get("陳柏安(玩家)")/10)*10);
-			bid_list.set("范姜永岩", randomInt(0, bid_list.get("陳柏安(玩家)")/10)*10);
-			
+				
+			bid_list.set(player, 2000);
+			bid_list.set("陳建宏", randomInt(0, bid_list.get(player)/10)*10);
+			bid_list.set("黃佳晨", randomInt(0, bid_list.get(player)/10)*10);
+			bid_list.set("范姜永岩", randomInt(0, bid_list.get(player)/10)*10);
+				
 			bid_list_sort();
 			refresh();
-			setTimeout(exceed, 3000);
+			setTimeout(exceed, 3000);		
 		}
 		
 		function plus(amount){
@@ -90,11 +96,21 @@
 		}
 
 		function bid(){
+			// alert('bid');
 			var new_bid = +document.getElementById("money").value;
 			var max_bid = Math.max(...bid_list.values());
 			
 			if(new_bid <= max_bid){
-				alert("您的出價: " + new_bid + "不可低於目前最高出價: " + max_bid);
+				alert("您的出價低於目前最高出價，點選確定後考慮重新出價或送出價格");
+				var yes = confirm("是否重新出價？");				
+					if (yes) {	
+						do {
+							var bid_again = prompt("請重新出價(不可低於目前最高出價)\n!!請輸入數字!!");
+							new_bid = bid_again;
+						} while(new_bid <= max_bid);
+					} else {
+						alert("已送出價格: " + new_bid);
+					}
 			}
 
 			if(new_bid > max_willing_bid){
@@ -113,7 +129,7 @@
 				return 
 			}
 
-			bid_list.set("陳柏安(玩家)", new_bid);
+			bid_list.set(player, new_bid);
 			bid_list_sort();
 			refresh();
 			setTimeout(exceed, 3000);
@@ -124,6 +140,7 @@
 		}
 			
 		function exceed(){
+			// alert('exceed');
 			var max_bid = Math.max(...bid_list.values());
 			var player_who_bids;
 			var new_bid;
@@ -132,7 +149,7 @@
 			
 			do{
 				player_who_bids = Array.from(bid_list.keys())[randomInt(0, 3)];				
-			}while(player_who_bids  == "陳柏安(玩家)");
+			}while(player_who_bids  == player);
 			
 			do{
 				new_bid = Math.round(max_bid*(1+randomInt(10, 30)/100));
@@ -141,8 +158,7 @@
 			bid_list.set(player_who_bids, new_bid);
 			bid_list_sort();
 			refresh();
-
-			var alert_box = confirm("您的出價已被超越，是否繼續出價？");
+			var alert_box = confirm("您的出價已被超越，是否繼續出價？\n目前最高價為-> " + player_who_bids + ": " + new_bid);
 			if (alert_box == false) {
 				alert("非常抱歉您沒有得標！");
 				return;
@@ -156,6 +172,7 @@
 			}
 			bid_list_html += "</ol>"	
 			document.getElementById("bid_list").innerHTML = bid_list_html;
+			// 重整頁面?
 		}
 
 		function bid_list_sort(){
@@ -163,7 +180,7 @@
 				yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
 			}
 		}
-
+        
 	</script>
 </head>
 
@@ -183,7 +200,7 @@
 										<p id="bid_list" class="card-text">
 											初始化... 
 											<script>
-												document.onload = setTimeout(initialize, 3000);
+												document.onload = setTimeout(initialize, 1000);
 											</script>
 										</p>
 									</div>
